@@ -1,8 +1,8 @@
 import express from 'express'
 import routes from './routes'
 import dotenv from 'dotenv'
-import '../data/database'
-import { dbConfig } from '../data/config/database'
+import 'reflect-metadata'
+import {createConnection} from 'typeorm'
 
 
 class App {
@@ -22,12 +22,10 @@ class App {
     }
 
     private async database() {
-        try {
-            await dbConfig.authenticate();
-            console.log('Connection has been established successfully.');
-          } catch (error) {
-            console.error('Unable to connect to the database:', error);
-          }
+        createConnection().then(async connection => {
+            console.log('Database connection established')
+        }).catch(error => console.log(error));
+        
     }
 
 
