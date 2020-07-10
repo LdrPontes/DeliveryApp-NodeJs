@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from "typeorm";
 
 @Entity()
 export class EnterpriseUser{
@@ -12,7 +12,7 @@ export class EnterpriseUser{
     @Column({nullable: false, length: 48})
     telephone: string;
 
-    @Column({nullable: false, length: 255})
+    @Column({nullable: false, length: 255, unique: true,})
     email: string;
 
     @Column({nullable: false})
@@ -21,6 +21,6 @@ export class EnterpriseUser{
     @CreateDateColumn()
     created_at: string
 
-    @CreateDateColumn()
+    @UpdateDateColumn()
     updated_at: string
 }

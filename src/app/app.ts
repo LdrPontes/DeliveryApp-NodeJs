@@ -1,9 +1,8 @@
+import createConnection from '../data/database/database'
 import express from 'express'
 import routes from './routes'
 import dotenv from 'dotenv'
 import 'reflect-metadata'
-import {createConnection} from 'typeorm'
-
 
 class App {
     public express = express.application
@@ -14,7 +13,7 @@ class App {
         this.configs()
         this.middlewares()
         this.database()
-        this.routes()
+        //this.routes()
     }
 
     private middlewares(): void {
@@ -23,9 +22,8 @@ class App {
 
     private async database() {
         createConnection().then(async connection => {
-            console.log('Database connection established')
-        }).catch(error => console.log(error));
-        
+            console.log("TypeORM connection success")
+        }).catch(error => console.log("TypeORM connection error: ", error))
     }
 
 
