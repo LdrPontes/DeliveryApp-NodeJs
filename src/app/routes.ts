@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import enterpriseUserController from './controllers/EnterpriseUserController'
+import authEnterpriseController from './controllers/AuthEnterpriseController'
 
 class Routes {
     public routes = Router()
@@ -20,7 +20,7 @@ class Routes {
     private registerEnterpriseRoute(): void {
         this.routes.post('/enterprise/register', (req, res) => {
             console.log(req.baseUrl)
-            enterpriseUserController.registerUser()
+            authEnterpriseController.registerEnterprise(req,res)
             res.json({ message: " Deu boa " })
         })
     }
