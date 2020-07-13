@@ -13,7 +13,7 @@ class App {
         this.configs()
         this.middlewares()
         this.database()
-        //this.routes()
+        this.routes()
     }
 
     private middlewares(): void {

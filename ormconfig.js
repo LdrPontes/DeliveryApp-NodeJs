@@ -1,5 +1,6 @@
 require('dotenv')
 
+
 module.exports = {
     "type": process.env.DB_TYPE,
     "host": process.env.DB_HOST,
@@ -9,6 +10,7 @@ module.exports = {
     "database": process.env.DB_NAME,
     "synchronize": true,
     "logging": false,
+    "columnHint":'snakeCase',
     "entities": [
         "src/domain/entities/**/*.ts"
     ],

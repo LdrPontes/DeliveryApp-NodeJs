@@ -12,16 +12,13 @@ class Routes {
 
     private authEnterpriseRoute(): void {
         this.routes.post('/enterprise/auth', (req, res) => {
-            console.log(req.baseUrl)
-            res.json({ message: " Oi " })
+            authEnterpriseController.authenticateEnterprise(req, res)
         })
     }
 
     private registerEnterpriseRoute(): void {
         this.routes.post('/enterprise/register', (req, res) => {
-            console.log(req.baseUrl)
             authEnterpriseController.registerEnterprise(req,res)
-            res.json({ message: " Deu boa " })
         })
     }
 }
