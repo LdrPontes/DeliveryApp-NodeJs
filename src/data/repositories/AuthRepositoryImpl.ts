@@ -2,12 +2,13 @@ import { IAuthRepository } from '../../domain/repositories/IAuthRepository'
 import { EnterpriseUser } from "../../domain/entities/EnterpriseUser";
 import { getRepository } from "typeorm";
 import bcrypt from 'bcryptjs'
-
+import AppError from '../../domain/utils/AppError';
 
 export class AuthRepositoryImpl implements IAuthRepository {
  
-    async registerEnterprise(name, telephone, email, password): Promise<EnterpriseUser> {
+    async registerEnterprise(name: string, telephone: string, email: string, password: string): Promise<EnterpriseUser> {
         try {
+
             const enterpriseUserRepository = getRepository(EnterpriseUser);
 
             const enterpriseUser = new EnterpriseUser()
@@ -25,7 +26,7 @@ export class AuthRepositoryImpl implements IAuthRepository {
         }
     }
 
-    async authenticateEnterprise(email, password): Promise<EnterpriseUser> {
+    async authenticateEnterprise(email: string, password: string): Promise<EnterpriseUser> {
         try {
             const enterpriseUserRepository = getRepository(EnterpriseUser);
 
@@ -36,7 +37,7 @@ export class AuthRepositoryImpl implements IAuthRepository {
             if (await bcrypt.compare(password, result.password_hash)) {
                 return result
             } else {
-                return null
+                throw new AppError(401, 'INVALID_PASSWORD', 'Incorrect password')
             }
         } catch (error) {
             console.log(error)

@@ -1,12 +1,16 @@
 class AppError {
     public readonly message: string;
-  
-    public readonly statusCode: number;
-  
-    constructor(message: string, statusCode = 400) {
+
+    public readonly name: string;
+
+    public readonly status: number;
+
+    constructor(statusCode = 400, statusName: string , message: string) {
+        this.status = statusCode;
+        this.name = statusName
         this.message = message;
-        this.statusCode = statusCode;
+
     }
 }
-  
+
 export default AppError;

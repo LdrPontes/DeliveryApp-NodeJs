@@ -1,7 +1,7 @@
-import { UseCase } from "../utils/UseCase";
-import { EnterpriseUser } from "../entities/EnterpriseUser";
-import { IAuthRepository } from "../repositories/IAuthRepository";
-import { AuthRepositoryImpl } from "../../data/repositories/AuthRepositoryImpl";
+import { UseCase } from "../../utils/UseCase";
+import { EnterpriseUser } from "../../entities/EnterpriseUser";
+import { IAuthRepository } from "../../repositories/IAuthRepository";
+import { AuthRepositoryImpl } from "../../../data/repositories/AuthRepositoryImpl";
 
 export class SignInEnterpriseUseCase extends UseCase<SignInEnterpriseResponse, SignInEnterpriseParams>{
     private repository: IAuthRepository = new AuthRepositoryImpl()
