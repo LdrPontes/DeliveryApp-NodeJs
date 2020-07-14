@@ -12,13 +12,13 @@ module.exports = {
     "logging": false,
     "columnHint":'snakeCase',
     "entities": [
-        "src/domain/entities/**/*.ts"
+        "src/domain/entities/*.ts"
     ],
     "migrations": [
-        "src/data/database/migrations/**/*.ts"
+        "src/data/database/migrations/*.ts"
     ],
     "subscribers": [
-        "src/data/database/subscribers/**/*.ts"
+        "src/data/database/subscribers/*.ts"
     ],
     "cli": {
         "entitiesDir": "src/domain/entities",

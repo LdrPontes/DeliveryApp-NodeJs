@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser"
 
-@Entity({name:  'enterprise'})
-export class Enterprise{
+@Entity({ name: 'enterprise' })
+export class Enterprise {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,16 +10,16 @@ export class Enterprise{
     @Column()
     name: string
 
-    @Column({nullable: true, length: 20})
+    @Column({ nullable: true, length: 20 })
     cnpj: string
 
-    @Column({nullable: true, length: 15})
+    @Column({ nullable: true, length: 15 })
     cpf: string
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     logo_url: string
 
     @OneToOne(type => EnterpriseUser)
-    @JoinColumn({name: "enterprise_user_id"})
+    @JoinColumn({ name: "enterprise_id" })
     enterprise_user: EnterpriseUser;
 }
