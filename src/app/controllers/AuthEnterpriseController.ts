@@ -11,7 +11,7 @@ class AuthEnterpriseController {
     signInEnterpriseUseCase = new SignInEnterpriseUseCase()
     signUpEnterpriseUseCase = new SignUpEnterpriseUseCase()
 
-    public async registerEnterprise(req: Request, res: Response) {
+    public async save(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
@@ -46,7 +46,7 @@ class AuthEnterpriseController {
         }
     }
 
-    public async authenticateEnterprise(req: Request, res: Response) {
+    public async auth(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 email: Yup.string().email().required(),
