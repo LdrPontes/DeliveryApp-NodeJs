@@ -1,10 +1,10 @@
 import { UseCase } from "../../utils/UseCase";
 import { EnterpriseUser } from "../../entities/EnterpriseUser";
 import { IAuthRepository } from "../../repositories/IAuthRepository";
-import { AuthRepositoryImpl } from "../../../data/repositories/AuthRepositoryImpl";
+import { AuthRepository } from "../../../data/repositories/AuthRepository";
 
 export class SignInEnterpriseUseCase extends UseCase<SignInEnterpriseResponse, SignInEnterpriseParams>{
-    private repository: IAuthRepository = new AuthRepositoryImpl()
+    private repository: IAuthRepository = new AuthRepository()
 
     async buildUseCase(params: SignInEnterpriseParams): Promise<SignInEnterpriseResponse> {
         try {

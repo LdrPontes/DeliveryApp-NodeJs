@@ -7,10 +7,10 @@ export class ReadOptionalSectionUseCase extends UseCase<ReadOptionalSectionRespo
 
 }
 
-class ReadOptionalSectionResponse {
+export class ReadOptionalSectionResponse {
 
 }
 
-class ReadOptionalSectionParams {
+export class ReadOptionalSectionParams {
 
 }

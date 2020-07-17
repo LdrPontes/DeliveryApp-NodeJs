@@ -7,10 +7,10 @@ export class DeleteOptionalUseCase extends UseCase<DeleteOptionalResponse, Delet
 
 }
 
-class DeleteOptionalResponse {
+export class DeleteOptionalResponse {
 
 }
 
-class DeleteOptionalParams {
+export class DeleteOptionalParams {
 
 }

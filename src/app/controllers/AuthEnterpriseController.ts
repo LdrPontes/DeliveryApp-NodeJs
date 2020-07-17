@@ -5,7 +5,7 @@ import AppError from "../../domain/utils/AppError";
 import jwt from 'jsonwebtoken'
 import * as Yup from 'yup'
 import textFormat from '../utils/TextFormat'
-
+import Strings from "../utils/Strings";
 
 class AuthEnterpriseController {
     signInEnterpriseUseCase = new SignInEnterpriseUseCase()
@@ -33,9 +33,11 @@ class AuthEnterpriseController {
                     id: enterprise.id,
                     name: enterprise.name,
                     telephone: enterprise.telephone,
-                    email: enterprise.email
+                    email: enterprise.email,
+                    created_at: enterprise.created_at,
+                    updated_at: enterprise.updated_at,
                 },
-                token: jwt.sign({id: enterprise.id}, "1bd9284b77e768af141184e0b5d7ef1c", {
+                token: jwt.sign({id: enterprise.id}, Strings.jwt_key, {
                     expiresIn: '1d'
 
                 })
@@ -67,9 +69,11 @@ class AuthEnterpriseController {
                     id: enterprise.id,
                     name: enterprise.name,
                     telephone: enterprise.telephone,
-                    email: enterprise.email
+                    email: enterprise.email,
+                    created_at: enterprise.created_at,
+                    updated_at: enterprise.updated_at,
                 },
-                token: jwt.sign({id: enterprise.id}, "1bd9284b77e768af141184e0b5d7ef1c", {
+                token: jwt.sign({id: enterprise.id}, Strings.jwt_key, {
                     expiresIn: '1d'
 
                 })

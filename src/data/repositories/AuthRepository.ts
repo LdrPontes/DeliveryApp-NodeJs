@@ -4,7 +4,7 @@ import { getRepository } from "typeorm";
 import bcrypt from 'bcryptjs'
 import AppError from '../../domain/utils/AppError';
 
-export class AuthRepositoryImpl implements IAuthRepository {
+export class AuthRepository implements IAuthRepository {
  
     async registerEnterprise(name: string, telephone: string, email: string, password: string): Promise<EnterpriseUser> {
         try {

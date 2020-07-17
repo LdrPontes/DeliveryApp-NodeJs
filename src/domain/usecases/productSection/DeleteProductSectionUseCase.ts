@@ -7,10 +7,10 @@ export class DeleteProductSectionUseCase extends UseCase<DeleteProductSectionRes
 
 }
 
-class DeleteProductSectionResponse {
+export class DeleteProductSectionResponse {
 
 }
 
-class DeleteProductSectionParams {
+export class DeleteProductSectionParams {
 
 }

@@ -7,10 +7,10 @@ export class DeleteProductUseCase extends UseCase<DeleteProductResponse, DeleteP
 
 }
 
-class DeleteProductResponse {
+export class DeleteProductResponse {
 
 }
 
-class DeleteProductParams {
+export class DeleteProductParams {
 
 }

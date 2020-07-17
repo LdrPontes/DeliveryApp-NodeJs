@@ -7,10 +7,10 @@ export class ReadProductUseCase extends UseCase<ReadProductResponse, ReadProduct
 
 }
 
-class ReadProductResponse {
+export class ReadProductResponse {
 
 }
 
-class ReadProductParams {
+export class ReadProductParams {
 
 }

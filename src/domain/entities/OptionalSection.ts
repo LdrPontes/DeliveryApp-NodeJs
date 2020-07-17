@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser";
 import { OptionalProduct } from "./OptionalProduct";
 
@@ -18,4 +18,10 @@ export class OptionalSection {
     @ManyToOne(type => EnterpriseUser, enterprise => enterprise.optional_sections)
     @JoinColumn({ name: 'enterprise_id' })
     enterprise: EnterpriseUser
+
+    @CreateDateColumn()
+    created_at: string
+
+    @UpdateDateColumn()
+    updated_at: string
 }

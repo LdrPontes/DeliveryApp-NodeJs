@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Product } from "./Product";
 import { EnterpriseUser } from "./EnterpriseUser";
 
@@ -14,6 +14,11 @@ export class ProductSection {
     @OneToMany(type => Product, product => product.section)
     products: Product[]
 
+    @CreateDateColumn()
+    created_at: string
+
+    @UpdateDateColumn()
+    updated_at: string
 
     @ManyToOne(type => EnterpriseUser, enterprise => enterprise.product_sections)
     @JoinColumn({ name: 'enterprise_id' })

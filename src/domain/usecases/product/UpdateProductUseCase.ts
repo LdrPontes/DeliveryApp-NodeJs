@@ -7,10 +7,10 @@ export class UpdateProductUseCase extends UseCase<UpdateProductResponse, UpdateP
 
 }
 
-class UpdateProductResponse {
+export class UpdateProductResponse {
 
 }
 
-class UpdateProductParams {
+export class UpdateProductParams {
 
 }

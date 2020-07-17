@@ -7,10 +7,10 @@ export class SaveProductUseCase extends UseCase<SaveProductResponse, SaveProduct
 
 }
 
-class SaveProductResponse {
+export class SaveProductResponse {
 
 }
 
-class SaveProductParams {
+export class SaveProductParams {
 
 }

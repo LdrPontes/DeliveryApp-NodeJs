@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinColumn, ManyToMany, JoinTable } from "typeorm";
+import { PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser";
 import { ProductSection } from "./ProductSection";
 import { OptionalSection } from "./OptionalSection";
@@ -40,4 +40,10 @@ export class Product {
             referencedColumnName: "id"
         }})
     optional_sections: OptionalSection[];
+
+    @CreateDateColumn()
+    created_at: string
+
+    @UpdateDateColumn()
+    updated_at: string
 }

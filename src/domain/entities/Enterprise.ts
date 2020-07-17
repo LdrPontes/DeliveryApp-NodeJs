@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, UpdateDateColumn, CreateDateColumn } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser"
 
 @Entity({ name: 'enterprise' })
@@ -18,6 +18,12 @@ export class Enterprise {
 
     @Column({ nullable: false })
     logo_url: string
+
+    @CreateDateColumn()
+    created_at: string
+
+    @UpdateDateColumn()
+    updated_at: string
 
     @OneToOne(type => EnterpriseUser)
     @JoinColumn({ name: "enterprise_id" })

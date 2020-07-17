@@ -7,10 +7,10 @@ export class SaveOptionalSectionUseCase extends UseCase<SaveOptionalSectionRespo
 
 }
 
-class SaveOptionalSectionResponse {
+export class SaveOptionalSectionResponse {
 
 }
 
-class SaveOptionalSectionParams {
+export class SaveOptionalSectionParams {
 
 }

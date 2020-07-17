@@ -7,10 +7,10 @@ export class UpdateOptionalUseCase extends UseCase<UpdateOptionalResponse, Updat
 
 }
 
-class UpdateOptionalResponse {
+export class UpdateOptionalResponse {
 
 }
 
-class UpdateOptionalParams {
+export class UpdateOptionalParams {
 
 }
