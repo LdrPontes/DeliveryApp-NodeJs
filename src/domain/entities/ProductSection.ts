@@ -11,6 +11,9 @@ export class ProductSection {
     @Column({ nullable: false, length: 255 })
     name: string
 
+    @Column({ nullable: false })
+    enterprise_id: number
+    
     @OneToMany(type => Product, product => product.section)
     products: Product[]
 

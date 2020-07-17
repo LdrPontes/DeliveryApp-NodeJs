@@ -6,6 +6,7 @@ import { SaveOptionalUseCase, SaveOptionalParams } from "../../domain/usecases/o
 import { UpdateOptionalUseCase, UpdateOptionalParams } from "../../domain/usecases/optional/UpdateOptionalUseCase";
 import * as Yup from 'yup'
 import AppError from "../../domain/utils/AppError";
+import Errors from '../utils/Errors';
 import textFormat from "../utils/TextFormat";
 
 class OptionalController implements CrudController {
@@ -36,8 +37,12 @@ class OptionalController implements CrudController {
             return res.json(optional)
 
         } catch (error) {
-            console.log(error)
-            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            if(Errors.isQueryError(error)) {
+                console.log(error)
+                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
         }
 
 
@@ -61,8 +66,12 @@ class OptionalController implements CrudController {
             return res.json(optional)
 
         } catch (error) {
-            console.log(error)
-            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            if(Errors.isQueryError(error)) {
+                console.log(error)
+                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
         }
       
 
@@ -89,8 +98,12 @@ class OptionalController implements CrudController {
             return res.json(optional)
 
         } catch (error) {
-            console.log(error)
-            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            if(Errors.isQueryError(error)) {
+                console.log(error)
+                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
         }
 
     }
@@ -116,8 +129,12 @@ class OptionalController implements CrudController {
             })
 
         } catch (error) {
-            console.log(error)
-            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            if(Errors.isQueryError(error)) {
+                console.log(error)
+                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
         }
     }
 }

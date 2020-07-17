@@ -21,6 +21,12 @@ export class Product {
     @Column({ nullable: false, precision: 2, default: 0, type: "decimal" })
     price: number
 
+    @Column({ nullable: false })
+    enterprise_id: number
+
+    @Column({ nullable: false })
+    product_section_id: number
+
     @ManyToOne(type => EnterpriseUser, enterprise => enterprise.products)
     @JoinColumn({ name: 'enterprise_id' })
     enterprise: EnterpriseUser

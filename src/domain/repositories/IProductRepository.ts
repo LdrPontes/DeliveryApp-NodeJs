@@ -6,7 +6,7 @@ export interface IProductRepository {
 
     read(id: number): Promise<Product>
 
-    update(id: number, name: string, price: number, section_id: number): Promise<Product>
+    update(id: number, title: string, description: string, img_url: string, price: number, section_id: number): Promise<Product>
 
-    delete(id: number): Promise<void>
+    delete(id: number): Promise<boolean>
 } 

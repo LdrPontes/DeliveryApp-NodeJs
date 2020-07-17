@@ -1,22 +1,67 @@
 import { IProductSectionRepository } from "../../domain/repositories/IProductSectionRepository";
 import { ProductSection } from "../../domain/entities/ProductSection";
+import { getRepository } from "typeorm";
 
 export class ProductionSectionRepository implements IProductSectionRepository {
 
-    save(name: string, enterprise_id: number): Promise<ProductSection> {
-        throw new Error("Method not implemented.");
+    async save(name: string, enterprise_id: number): Promise<ProductSection> {
+        try {
+
+            const repository = getRepository(ProductSection);
+
+            const section = new ProductSection()
+
+            section.name = name
+            section.enterprise_id = enterprise_id
+
+            return await repository.save(section)
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
-    read(id: number): Promise<ProductSection> {
-        throw new Error("Method not implemented.");
+    async read(id: number): Promise<ProductSection> {
+        try {
+
+            const repository = getRepository(ProductSection);
+
+            return await repository.findOneOrFail({ where: { id: id } })
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
-    update(id: number, name: string): Promise<ProductSection> {
-        throw new Error("Method not implemented.");
+    async update(id: number, name: string): Promise<ProductSection> {
+        try {
+
+            const repository = getRepository(ProductSection);
+
+            const result = await repository.update(id, { name: name })
+
+            return await repository.findOneOrFail({ where: { id: id } })
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
-    
-    delete(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
+
+    async delete(id: number): Promise<boolean> {
+        try {
+
+            const repository = getRepository(ProductSection);
+
+            const result  = await repository.delete(id)
+
+            return result.affected > 0
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
 }

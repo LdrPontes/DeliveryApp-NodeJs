@@ -1,22 +1,67 @@
 import { IOptionalSectionRepository } from "../../domain/repositories/IOptionalSectionRepository";
 import { OptionalSection } from "../../domain/entities/OptionalSection";
+import { getRepository } from "typeorm";
 
 export class OptionalSectionRepository implements IOptionalSectionRepository {
 
-    save(name: string, enterprise_id: number): Promise<OptionalSection> {
-        throw new Error("Method not implemented.");
+    async save(name: string, enterprise_id: number): Promise<OptionalSection> {
+        try {
+
+            const repository = getRepository(OptionalSection);
+
+            const section = new OptionalSection()
+
+            section.name = name
+            section.enterprise_id = enterprise_id
+
+            return await repository.save(section)
+            
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
-    read(id: number): Promise<OptionalSection> {
-        throw new Error("Method not implemented.");
+    async read(id: number): Promise<OptionalSection> {
+        try {
+
+            const repository = getRepository(OptionalSection);
+
+            return await repository.findOneOrFail({ where: { id: id } })
+            
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
-    update(id: number, name: string): Promise<OptionalSection> {
-        throw new Error("Method not implemented.");
+    async update(id: number, name: string): Promise<OptionalSection> {
+        try {
+
+            const repository = getRepository(OptionalSection);
+
+            const result = await repository.update(id, { name: name })
+
+            return await repository.findOneOrFail({ where: { id: id } })
+        
+        } catch (error) {   
+            console.log(error)
+            throw error
+        }
     }
     
-    delete(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(id: number): Promise<boolean> {
+        try {
+
+            const repository = getRepository(OptionalSection);
+
+            const result  = await repository.delete(id)
+
+            return result.affected > 0
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
 }

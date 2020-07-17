@@ -6,6 +6,9 @@ import optionalController from './controllers/OptionalController'
 import productSectionController from './controllers/ProductSectionController'
 import optionalSectionController from './controllers/OptionalSectionController'
 
+import authMiddleware from './middlewares/AuthMiddleware'
+
+
 class Routes {
     public routes = Router()
     
@@ -30,87 +33,87 @@ class Routes {
     }
 
     private enterpriseRoutes(): void {
-        this.routes.post('/enterprise/save', (req, res) => {
+        this.routes.post('/enterprise/save', authMiddleware, (req, res) => {
             enterpriseController.save(req, res)
         })
 
-        this.routes.get('/enterprise/read/:id', (req, res) => {
+        this.routes.get('/enterprise/read/:id', authMiddleware, (req, res) => {
             enterpriseController.read(req, res)
         })
 
-        this.routes.put('/enterprise/update', (req, res) => {
+        this.routes.put('/enterprise/update', authMiddleware, (req, res) => {
             enterpriseController.update(req, res)
         })
     }
 
     private productRoutes(){
-        this.routes.post('/product/save', (req, res) => {
+        this.routes.post('/product/save', authMiddleware, (req, res) => {
             productController.save(req, res)
         })
 
-        this.routes.get('/product/read/:id', (req, res) => {
+        this.routes.get('/product/read/:id', authMiddleware, (req, res) => {
             productController.read(req, res)
         })
 
-        this.routes.put('/product/update', (req, res) => {
+        this.routes.put('/product/update', authMiddleware, (req, res) => {
             productController.update(req, res)
         })
 
-        this.routes.delete('/product/delete/:id', (req, res) => {
+        this.routes.delete('/product/delete/:id', authMiddleware,(req, res) => {
             productController.delete(req, res)
         })
     }
 
     private optionalRoutes(){
-        this.routes.post('/optional/save', (req, res) => {
+        this.routes.post('/optional/save', authMiddleware, (req, res) => {
             optionalController.save(req, res)
         })
 
-        this.routes.get('/optional/read/:id', (req, res) => {
+        this.routes.get('/optional/read/:id', authMiddleware, (req, res) => {
             optionalController.read(req, res)
         })
 
-        this.routes.put('/optional/update', (req, res) => {
+        this.routes.put('/optional/update', authMiddleware, (req, res) => {
             optionalController.update(req, res)
         })
 
-        this.routes.delete('/optional/delete/:id', (req, res) => {
+        this.routes.delete('/optional/delete/:id', authMiddleware, (req, res) => {
             optionalController.delete(req, res)
         })
     }
 
     private productSectionRoutes(){
-        this.routes.post('/section/product/save', (req, res) => {
+        this.routes.post('/section/product/save', authMiddleware, (req, res) => {
             productSectionController.save(req, res)
         })
 
-        this.routes.get('/section/product/read/:id', (req, res) => {
+        this.routes.get('/section/product/read/:id', authMiddleware, (req, res) => {
             productSectionController.read(req, res)
         })
 
-        this.routes.put('/section/product/update', (req, res) => {
+        this.routes.put('/section/product/update', authMiddleware, (req, res) => {
             productSectionController.update(req, res)
         })
 
-        this.routes.delete('/section/product/delete/:id', (req, res) => {
+        this.routes.delete('/section/product/delete/:id', authMiddleware, (req, res) => {
             productSectionController.delete(req, res)
         })
     }
 
     private optionalSectionRoutes(){
-        this.routes.post('/section/optional/save', (req, res) => {
+        this.routes.post('/section/optional/save', authMiddleware, (req, res) => {
             optionalSectionController.save(req, res)
         })
 
-        this.routes.get('/section/optional/read/:id', (req, res) => {
+        this.routes.get('/section/optional/read/:id', authMiddleware, (req, res) => {
             optionalSectionController.read(req, res)
         })
 
-        this.routes.put('/section/optional/update', (req, res) => {
+        this.routes.put('/section/optional/update', authMiddleware, (req, res) => {
             optionalSectionController.update(req, res)
         })
 
-        this.routes.delete('/section/optional/delete/:id', (req, res) => {
+        this.routes.delete('/section/optional/delete/:id', authMiddleware, (req, res) => {
             optionalSectionController.delete(req, res)
         })
     }

@@ -11,9 +11,9 @@ export class SaveOptionalUseCase extends UseCase<SaveOptionalResponse, SaveOptio
      
         try {
             
-            const optional = await this.repository.save(params.name, params.price, params.enterprise_id, params.section_id)
+            const result = await this.repository.save(params.name, params.price, params.enterprise_id, params.section_id)
 
-            return new SaveOptionalResponse(optional)
+            return new SaveOptionalResponse(result)
 
         } catch (error) {
             console.log(error)

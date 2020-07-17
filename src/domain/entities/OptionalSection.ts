@@ -15,6 +15,9 @@ export class OptionalSection {
     @OneToMany(type => OptionalProduct, product => product.section)
     products: OptionalProduct[]
 
+    @Column({ nullable: false })
+    enterprise_id: number
+    
     @ManyToOne(type => EnterpriseUser, enterprise => enterprise.optional_sections)
     @JoinColumn({ name: 'enterprise_id' })
     enterprise: EnterpriseUser

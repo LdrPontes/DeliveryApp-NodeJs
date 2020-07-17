@@ -8,5 +8,5 @@ export interface IOptionalSectionRepository {
 
     update(id: number, name: string): Promise<OptionalSection>
 
-    delete(id: number): Promise<void>
+    delete(id: number): Promise<boolean>
 } 

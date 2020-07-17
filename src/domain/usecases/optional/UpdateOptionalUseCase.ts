@@ -10,9 +10,9 @@ export class UpdateOptionalUseCase extends UseCase<UpdateOptionalResponse, Updat
     async buildUseCase(params: UpdateOptionalParams): Promise<UpdateOptionalResponse> {
         try {
             
-            const optional = await this.repository.update(params.id, params.name, params.price, params.section_id)
+            const result = await this.repository.update(params.id, params.name, params.price, params.section_id)
 
-            return new UpdateOptionalResponse(optional)
+            return new UpdateOptionalResponse(result)
 
         } catch (error) {
             console.log(error)

@@ -10,9 +10,9 @@ export class ReadOptionalUseCase extends UseCase<ReadOptionalResponse, ReadOptio
     async buildUseCase(params: ReadOptionalParams): Promise<ReadOptionalResponse> {
         try {
 
-            const optional = await this.repository.read(params.id)
+            const result = await this.repository.read(params.id)
 
-            return new ReadOptionalResponse(optional)
+            return new ReadOptionalResponse(result)
 
         } catch (error) {
             console.log(error)
