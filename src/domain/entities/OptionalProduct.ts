@@ -8,7 +8,7 @@ export class OptionalProduct {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ nullable: false, precision: 2, type: "decimal" })
+    @Column({ nullable: false, precision: 2, type: "float" })
     price: number
 
     @Column({ nullable: false, length: 255 })

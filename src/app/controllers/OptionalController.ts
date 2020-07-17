@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import CrudController from '../utils/CrudController'
-import { DeleteOptionalUseCase } from "../../domain/usecases/optional/DeleteOptionalUseCase";
+import { DeleteOptionalUseCase, DeleteOptionalParams } from "../../domain/usecases/optional/DeleteOptionalUseCase";
 import { ReadOptionalUseCase, ReadOptionalParams } from "../../domain/usecases/optional/ReadOptionalUseCase";
 import { SaveOptionalUseCase, SaveOptionalParams } from "../../domain/usecases/optional/SaveOptionalUseCase";
-import { UpdateOptionalUseCase } from "../../domain/usecases/optional/UpdateOptionalUseCase";
+import { UpdateOptionalUseCase, UpdateOptionalParams } from "../../domain/usecases/optional/UpdateOptionalUseCase";
 import * as Yup from 'yup'
 import AppError from "../../domain/utils/AppError";
 import textFormat from "../utils/TextFormat";
@@ -69,24 +69,56 @@ class OptionalController implements CrudController {
     }
 
     async update(req: Request, res: Response) {
-        const schema = Yup.object().shape({
-            id: Yup.number().integer().required(),
-            name: Yup.string(),
-            price: Yup.number(),
-            section_id: Yup.number().integer(),
+        try {
+            const schema = Yup.object().shape({
+                name: Yup.string(),
+                price: Yup.number(),
+                id: Yup.number().required().integer(),
+                section_id: Yup.number().integer(),
 
-        })
+            })
 
-        if (!(await schema.isValid(req.body))) {
-            return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
+            if (!(await schema.isValid(req.body))) {
+                return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
+            }
+
+            const { id, name, price, section_id } = req.body
+
+            const optional = (await this.updateOptionalUseCase.execute(new UpdateOptionalParams(id , name, price, section_id))).optional
+
+            return res.json(optional)
+
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
         }
-
-        return res.json({ message: "Foi" })
 
     }
 
     async delete(req: Request, res: Response) {
-        //TODO
+        try { 
+            const schema = Yup.object().shape({
+                id: Yup.number().integer().required()
+            })
+    
+            if (!(await schema.isValid(req.params))) {
+                return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
+            }
+    
+            const { id } = req.params
+    
+            const result = (await this.deleteOptionalUseCase.execute(new DeleteOptionalParams(Number(id)))).success
+    
+            return res.status(result ? 200 : 400).json({
+                status: result ? 200 : 400,
+                name: result ? 'ENTITY_DELETED' : 'ENTITY_NOT_FOUND',
+                success: result
+            })
+
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+        }
     }
 }
 

@@ -37,12 +37,35 @@ export class OptionalRepository implements IOptionalRepository {
         }
     }
 
-    update(id: number, name: string, price: number, section_id: number): Promise<OptionalProduct> {
-        throw new Error("Method not implemented.");
+    async update(id: number, name: string, price: number, section_id: number): Promise<OptionalProduct> {
+        try {
+
+            const repository = getRepository(OptionalProduct);
+
+            const result = await repository.update(id, { name: name, price: price, optional_section_id: section_id })
+
+         
+
+            return await repository.findOneOrFail({ where: { id: id } })
+        
+        } catch (error) {   
+            console.log(error)
+            throw error
+        }
     }
     
-    delete(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(id: number): Promise<boolean> {
+        try {
+
+            const repository = getRepository(OptionalProduct);
+
+            const result  = await repository.delete(id)
+
+            return result.affected > 0
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
 }
