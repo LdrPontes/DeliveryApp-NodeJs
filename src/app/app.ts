@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/node';
 import sentryConfig from './config/sentry'
 import 'reflect-metadata'
 import AppError from '../domain/utils/AppError'
+import cors from 'cors'
 
 class App {
     public express = express.application
@@ -25,6 +26,7 @@ class App {
     private middlewares(): void {
         this.express.use(Sentry.Handlers.requestHandler())
         this.express.use(express.json())
+        this.express.use(cors());
     }
 
     private async database() {
@@ -41,6 +43,7 @@ class App {
     private routes(): void {
         this.express.use(routes)
         this.express.use(Sentry.Handlers.errorHandler())
+        this.express.use(cors())
     }
 
     private configs(): void {
