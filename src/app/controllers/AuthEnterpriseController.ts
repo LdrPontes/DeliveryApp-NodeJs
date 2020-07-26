@@ -20,16 +20,16 @@ class AuthEnterpriseController {
                 password: Yup.string().min(6).required(),
             })
 
-            if(!(await schema.isValid(req.body))){
+            if (!(await schema.isValid(req.body))) {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
             const { name, telephone, email, password } = req.body
-        
+
             const enterprise = (await this.signUpEnterpriseUseCase.execute(new SignUpEnterpriseParams(name, telephone, email, password))).enterpriseUser
 
             res.json({
-                enterprise_user : {
+                enterprise_user: {
                     id: enterprise.id,
                     name: enterprise.name,
                     telephone: enterprise.telephone,
@@ -37,14 +37,17 @@ class AuthEnterpriseController {
                     created_at: enterprise.created_at,
                     updated_at: enterprise.updated_at,
                 },
-                token: jwt.sign({id: enterprise.id}, Strings.jwt_key, {
+                token: jwt.sign({ id: enterprise.id }, Strings.jwt_key, {
                     expiresIn: '1d'
 
                 })
             })
         } catch (error) {
             console.log(error)
-            res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            if (error.message.includes('ER_DUP_ENTRY'))
+                res.status(400).json(new AppError(400, 'ER_DUP_ENTRY', error.message))
+            else
+                res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
         }
     }
 
@@ -55,17 +58,17 @@ class AuthEnterpriseController {
                 password: Yup.string().min(6).required(),
             })
 
-            if(!(await schema.isValid(req.body))){
+            if (!(await schema.isValid(req.body))) {
                 console.log(schema)
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
             const { email, password } = req.body
-            
+
             const enterprise = (await this.signInEnterpriseUseCase.execute(new SignInEnterpriseParams(email, password))).enterpriseUser
-            
+
             res.json({
-                enterprise_user : {
+                enterprise_user: {
                     id: enterprise.id,
                     name: enterprise.name,
                     telephone: enterprise.telephone,
@@ -73,7 +76,7 @@ class AuthEnterpriseController {
                     created_at: enterprise.created_at,
                     updated_at: enterprise.updated_at,
                 },
-                token: jwt.sign({id: enterprise.id}, Strings.jwt_key, {
+                token: jwt.sign({ id: enterprise.id }, Strings.jwt_key, {
                     expiresIn: '1d'
 
                 })
