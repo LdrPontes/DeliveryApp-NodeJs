@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { SignInEnterpriseUseCase, SignInEnterpriseParams } from "../../domain/usecases/enterprise/SignInEnterpriseUseCase";
-import { SignUpEnterpriseUseCase, SignUpEnterpriseParams } from "../../domain/usecases/enterprise/SignUpEnterpriseUseCase";
+import { SignInEnterpriseUseCase, SignInEnterpriseParams } from "../../domain/usecases/auth/SignInEnterpriseUseCase";
+import { SignUpEnterpriseUseCase, SignUpEnterpriseParams } from "../../domain/usecases/auth/SignUpEnterpriseUseCase";
 import AppError from "../../domain/utils/AppError";
 import jwt from 'jsonwebtoken'
 import * as Yup from 'yup'

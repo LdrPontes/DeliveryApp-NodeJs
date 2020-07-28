@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, UpdateDateColumn, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser"
+import { Category } from "./Category";
 
 @Entity({ name: 'enterprise' })
 export class Enterprise {
@@ -19,6 +20,12 @@ export class Enterprise {
     @Column({ nullable: false })
     logo_url: string
 
+    @Column({ nullable: false })
+    enterprise_id: number
+
+    @Column({ nullable: false })
+    category_id: number
+    
     @CreateDateColumn()
     created_at: string
 
@@ -28,4 +35,8 @@ export class Enterprise {
     @OneToOne(type => EnterpriseUser)
     @JoinColumn({ name: "enterprise_id" })
     enterprise_user: EnterpriseUser;
+
+    @ManyToOne(type => Category)
+    @JoinColumn({ name: "category_id" })
+    category: Category;
 }
