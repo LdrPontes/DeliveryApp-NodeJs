@@ -18,6 +18,9 @@ export class Enterprise {
     document_type: number //0 - CPF. 1 - CNPJ
 
     @Column({ nullable: false })
+    address: string
+
+    @Column({ nullable: false })
     logo_url: string
 
     @Column({ nullable: false })

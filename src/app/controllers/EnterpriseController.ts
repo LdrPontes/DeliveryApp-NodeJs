@@ -11,19 +11,20 @@ import { DeleteEnterpriseUseCase, DeleteEnterpriseParams } from "../../domain/us
 
 
 class EnterpriseController implements CrudController {
-    
+
     saveEnterpriseUseCase = new SaveEnterpriseUseCase()
     readEnterpriseUseCase = new ReadEnterpriseUseCase()
     updateEnterpriseUseCase = new UpdateEnterpriseUseCase()
     deleteEnterpriseUseCase = new DeleteEnterpriseUseCase()
 
-    async save(req: Request, res: Response){
+    async save(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
                 document_type: Yup.number().required(),
                 document: Yup.string().required(),
                 logo_url: Yup.string(),
+                address: Yup.string().required(),
                 category_id: Yup.number().required().integer(),
                 enterprise_id: Yup.number().required().integer(),
             })
@@ -32,14 +33,14 @@ class EnterpriseController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { name, document_type, document, logo_url, enterprise_id, category_id } = req.body
+            const { name, document_type, document, address, logo_url, enterprise_id, category_id } = req.body
 
-            const optional = (await this.saveEnterpriseUseCase.execute(new SaveEnterpriseParams(name, document_type, document, logo_url, enterprise_id, category_id))).enterprise
+            const optional = (await this.saveEnterpriseUseCase.execute(new SaveEnterpriseParams(name, document_type, document, address, logo_url, enterprise_id, category_id))).enterprise
 
             return res.json(optional)
 
         } catch (error) {
-            if(Errors.isQueryError(error)) {
+            if (Errors.isQueryError(error)) {
                 console.log(error)
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
@@ -48,24 +49,24 @@ class EnterpriseController implements CrudController {
         }
     }
 
-    async read(req: Request, res: Response){
-        try { 
+    async read(req: Request, res: Response) {
+        try {
             const schema = Yup.object().shape({
                 id: Yup.number().integer().required()
             })
-    
+
             if (!(await schema.isValid(req.params))) {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
-    
+
             const { id } = req.params
-    
+
             const enterprise = (await this.readEnterpriseUseCase.execute(new ReadEnterpriseParams(Number(id)))).enterprise
-    
+
             return res.json(enterprise)
 
         } catch (error) {
-            if(Errors.isQueryError(error)) {
+            if (Errors.isQueryError(error)) {
                 console.log(error)
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
@@ -74,11 +75,12 @@ class EnterpriseController implements CrudController {
         }
     }
 
-    async update(req: Request, res: Response){
+    async update(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 name: Yup.string(),
                 logo_url: Yup.string(),
+                address: Yup.string(),
                 id: Yup.number().required().integer(),
                 category_id: Yup.number().integer(),
 
@@ -88,14 +90,14 @@ class EnterpriseController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { id, name, logo_url, category_id } = req.body
+            const { id, name, address, logo_url, category_id } = req.body
 
-            const enterprise = (await this.updateEnterpriseUseCase.execute(new UpdateEnterpriseParams(id , name, logo_url, category_id))).enterprise
+            const enterprise = (await this.updateEnterpriseUseCase.execute(new UpdateEnterpriseParams(id, name, address, logo_url, category_id))).enterprise
 
             return res.json(enterprise)
 
         } catch (error) {
-            if(Errors.isQueryError(error)) {
+            if (Errors.isQueryError(error)) {
                 console.log(error)
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
@@ -105,19 +107,19 @@ class EnterpriseController implements CrudController {
     }
 
     async delete(req: Request, res: Response) {
-        try { 
+        try {
             const schema = Yup.object().shape({
                 id: Yup.number().integer().required()
             })
-    
+
             if (!(await schema.isValid(req.params))) {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
-    
+
             const { id } = req.params
-    
+
             const result = (await this.deleteEnterpriseUseCase.execute(new DeleteEnterpriseParams(Number(id)))).success
-    
+
             return res.status(result ? 200 : 400).json({
                 status: result ? 200 : 400,
                 name: result ? 'ENTITY_DELETED' : 'ENTITY_NOT_FOUND',
@@ -125,7 +127,7 @@ class EnterpriseController implements CrudController {
             })
 
         } catch (error) {
-            if(Errors.isQueryError(error)) {
+            if (Errors.isQueryError(error)) {
                 console.log(error)
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
