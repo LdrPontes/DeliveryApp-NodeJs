@@ -11,8 +11,8 @@ class CategoryController {
 
     async readAll(req: Request, res: Response) {
         try {
-            const result = await this.readAllCategoryUseCase.execute()
-            
+            const result = await (await this.readAllCategoryUseCase.execute()).categories
+
             res.json(result)
         } catch (error) {
             if (Errors.isQueryError(error)) {
