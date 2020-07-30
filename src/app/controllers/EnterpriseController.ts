@@ -8,7 +8,8 @@ import { SaveEnterpriseUseCase, SaveEnterpriseParams } from "../../domain/usecas
 import { ReadEnterpriseUseCase, ReadEnterpriseParams } from "../../domain/usecases/enterprise/ReadEnterpriseUseCase";
 import { UpdateEnterpriseUseCase, UpdateEnterpriseParams } from "../../domain/usecases/enterprise/UpdateEnterpriseUseCase";
 import { DeleteEnterpriseUseCase, DeleteEnterpriseParams } from "../../domain/usecases/enterprise/DeleteEnterpriseUseCase";
-
+import { UploadImageUseCase, UploadImageParams } from "../../domain/usecases/image/UploadImageUseCase";
+import { v4 as uuidv4 } from 'uuid';
 
 class EnterpriseController implements CrudController {
 
@@ -17,13 +18,16 @@ class EnterpriseController implements CrudController {
     updateEnterpriseUseCase = new UpdateEnterpriseUseCase()
     deleteEnterpriseUseCase = new DeleteEnterpriseUseCase()
 
+    uploadImageUseCase = new UploadImageUseCase()
+
     async save(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
                 document_type: Yup.number().required(),
                 document: Yup.string().required(),
-                logo_url: Yup.string(),
+                img: Yup.string(),
+                img_type: Yup.string(),
                 address: Yup.string().required(),
                 category_id: Yup.number().required().integer(),
                 enterprise_id: Yup.number().required().integer(),
@@ -33,7 +37,14 @@ class EnterpriseController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { name, document_type, document, address, logo_url, enterprise_id, category_id } = req.body
+            const { name, document_type, document, address, img, img_type,  enterprise_id, category_id } = req.body
+
+            let logo_url = ''
+
+            if(img != null && img_type != null) {
+                logo_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4() ,img, img_type))).url
+            }
+            
 
             const optional = (await this.saveEnterpriseUseCase.execute(new SaveEnterpriseParams(name, document_type, document, address, logo_url, enterprise_id, category_id))).enterprise
 
@@ -41,7 +52,7 @@ class EnterpriseController implements CrudController {
 
         } catch (error) {
             if (Errors.isQueryError(error)) {
-                console.log(error)
+                console.log('QueryError')
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
                 return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
