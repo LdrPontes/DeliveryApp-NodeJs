@@ -5,8 +5,8 @@ import productController from './controllers/ProductController'
 import optionalController from './controllers/OptionalController'
 import productSectionController from './controllers/ProductSectionController'
 import optionalSectionController from './controllers/OptionalSectionController'
-
 import authMiddleware from './middlewares/AuthMiddleware'
+import categoryController from './controllers/CategoryController'
 
 
 class Routes {
@@ -20,6 +20,7 @@ class Routes {
         this.optionalSectionRoutes()
         this.productRoutes()
         this.productSectionRoutes()
+        this.categoryRoutes()
     }
 
     private authEnterpriseRoutes(): void {
@@ -115,6 +116,12 @@ class Routes {
 
         this.routes.delete('/section/optional/delete/:id', authMiddleware, (req, res) => {
             optionalSectionController.delete(req, res)
+        })
+    }
+
+    private categoryRoutes(){
+        this.routes.get('/category/read', authMiddleware, (req, res) => {
+            categoryController.readAll(req, res)
         })
     }
 }
