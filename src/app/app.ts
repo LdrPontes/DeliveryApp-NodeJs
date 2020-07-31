@@ -43,7 +43,6 @@ class App {
     private routes(): void {
         this.express.use(routes)
         this.express.use(Sentry.Handlers.errorHandler())
-        this.express.use(cors())
     }
 
     private configs(): void {

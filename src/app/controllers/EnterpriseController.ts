@@ -10,6 +10,7 @@ import { UpdateEnterpriseUseCase, UpdateEnterpriseParams } from "../../domain/us
 import { DeleteEnterpriseUseCase, DeleteEnterpriseParams } from "../../domain/usecases/enterprise/DeleteEnterpriseUseCase";
 import { UploadImageUseCase, UploadImageParams } from "../../domain/usecases/image/UploadImageUseCase";
 import { v4 as uuidv4 } from 'uuid';
+import { cpf, cnpj } from 'cpf-cnpj-validator'
 
 class EnterpriseController implements CrudController {
 
@@ -37,14 +38,28 @@ class EnterpriseController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { name, document_type, document, address, img, img_type,  enterprise_id, category_id } = req.body
 
+            const { name, document_type, document, address, img, img_type, enterprise_id, category_id } = req.body
+
+            //Valida o documento
+            if (document_type == 0) { //CPF
+                if (!cpf.isValid(document)) {
+                    return res.status(400).json(new AppError(400, textFormat.camelToUnderscore('INVALID_DOCUMENT'), 'This document (CPF) is not valid'))
+                }
+            } else {    //CNPJ
+                if (!cnpj.isValid(document)) {
+                    return res.status(400).json(new AppError(400, textFormat.camelToUnderscore('INVALID_DOCUMENT'), 'This document (CNPJ) is not valid'))
+                }
+            }
+
+
+            //Salva os dados no db
             let logo_url = ''
 
-            if(img != null && img_type != null) {
-                logo_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4() ,img, img_type))).url
+            if (img != null && img_type != null && img != "" && img_type != "") {
+                logo_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4(), img, img_type))).url
             }
-            
+
 
             const optional = (await this.saveEnterpriseUseCase.execute(new SaveEnterpriseParams(name, document_type, document, address, logo_url, enterprise_id, category_id))).enterprise
 
@@ -52,8 +67,10 @@ class EnterpriseController implements CrudController {
 
         } catch (error) {
             if (Errors.isQueryError(error)) {
-                console.log('QueryError')
-                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+                if (error.message.includes('ER_DUP_ENTRY'))
+                    return res.status(400).json(new AppError(400, 'ER_DUP_ENTRY', error.message))
+                else
+                    return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
                 return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
             }
