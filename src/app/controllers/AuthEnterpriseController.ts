@@ -73,6 +73,7 @@ class AuthEnterpriseController {
                     name: enterprise.name,
                     telephone: enterprise.telephone,
                     email: enterprise.email,
+                    enterprise: enterprise.enterprise,
                     created_at: enterprise.created_at,
                     updated_at: enterprise.updated_at,
                 },

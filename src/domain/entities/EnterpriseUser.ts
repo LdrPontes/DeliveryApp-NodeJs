@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, OneToMany, OneToOne, JoinColumn } from "typeorm";
 import { Product } from "./Product";
 import { ProductSection } from "./ProductSection";
 import { OptionalProduct } from "./OptionalProduct";
 import { OptionalSection } from "./OptionalSection";
+import { Enterprise } from "./Enterprise";
 
 @Entity({ name: "enterprise_user" })
 export class EnterpriseUser {
@@ -28,6 +29,9 @@ export class EnterpriseUser {
     @UpdateDateColumn()
     updated_at: string
 
+    @Column({ nullable: true })
+    enterprise_id: number
+
     @OneToMany(type => Product, product => product.enterprise)
     products: Product[]
 
@@ -39,4 +43,9 @@ export class EnterpriseUser {
 
     @OneToMany(type => OptionalSection, optional => optional.enterprise)
     optional_sections: OptionalSection[]
+
+    @OneToOne(type => Enterprise)
+    @JoinColumn({ name: "enterprise_id" })
+    enterprise: Enterprise;
+
 }

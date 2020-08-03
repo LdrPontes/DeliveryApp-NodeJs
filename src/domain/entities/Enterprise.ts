@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
-import { EnterpriseUser } from "./EnterpriseUser"
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { Category } from "./Category";
 
 @Entity({ name: 'enterprise' })
@@ -24,9 +23,6 @@ export class Enterprise {
     logo_url: string
 
     @Column({ nullable: false })
-    enterprise_id: number
-
-    @Column({ nullable: false })
     category_id: number
     
     @CreateDateColumn()
@@ -34,10 +30,6 @@ export class Enterprise {
 
     @UpdateDateColumn()
     updated_at: string
-
-    @OneToOne(type => EnterpriseUser)
-    @JoinColumn({ name: "enterprise_id" })
-    enterprise_user: EnterpriseUser;
 
     @ManyToOne(type => Category)
     @JoinColumn({ name: "category_id" })

@@ -1,6 +1,7 @@
 import { IEnterpriseRepository } from "../../domain/repositories/IEnterpriseRepository";
 import { Enterprise } from "../../domain/entities/Enterprise";
 import { getRepository } from "typeorm";
+import { EnterpriseUser } from "../../domain/entities/EnterpriseUser";
 
 
 export class EnterpriseRepository implements IEnterpriseRepository {
@@ -8,6 +9,8 @@ export class EnterpriseRepository implements IEnterpriseRepository {
         try {
 
             const repository = getRepository(Enterprise);
+            const repositoryUser = getRepository(EnterpriseUser);
+
 
             const enterprise = new Enterprise()
 
@@ -16,10 +19,15 @@ export class EnterpriseRepository implements IEnterpriseRepository {
             enterprise.document = document
             enterprise.address = address
             enterprise.logo_url = logo_url
-            enterprise.enterprise_id = enterprise_id
             enterprise.category_id = category_id
 
-            return await repository.save(enterprise)
+
+            const result = await repository.save(enterprise)
+
+            await repositoryUser.update(enterprise_id, { enterprise : enterprise })
+
+            return result
+
 
         } catch (error) {
             console.log(error)

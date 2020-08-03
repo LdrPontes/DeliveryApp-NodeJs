@@ -30,7 +30,7 @@ export class AuthRepository implements IAuthRepository {
         try {
             const enterpriseUserRepository = getRepository(EnterpriseUser);
 
-            const result = await enterpriseUserRepository.findOneOrFail({ where: { email } })
+            const result = await enterpriseUserRepository.findOneOrFail({ where: { email }, relations: ["enterprise"]})
 
             console.log(result)
 
