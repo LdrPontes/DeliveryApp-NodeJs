@@ -10,10 +10,10 @@ export class Enterprise {
     @Column()
     name: string
 
-    @Column({ nullable: false, length: 20 })
+    @Column({ nullable: false, length: 20, unique: true})
     document: string
 
-    @Column({ nullable: false })
+    @Column({ nullable: false})
     document_type: number //0 - CPF. 1 - CNPJ
 
     @Column({ nullable: false })
