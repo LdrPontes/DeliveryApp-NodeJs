@@ -55,9 +55,9 @@ class ProductSectionController implements CrudController {
     
             const { id } = req.params
     
-            const section = (await this.readProductSectionUseCase.execute(new ReadProductSectionParams(Number(id)))).section
+            const sections = (await this.readProductSectionUseCase.execute(new ReadProductSectionParams(Number(id)))).sections
     
-            return res.json(section)
+            return res.json(sections)
 
         } catch (error) {
             if(Errors.isQueryError(error)) {

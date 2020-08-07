@@ -22,12 +22,12 @@ export class ProductionSectionRepository implements IProductSectionRepository {
         }
     }
 
-    async read(id: number): Promise<ProductSection> {
+    async read(id: number): Promise<ProductSection[]> {
         try {
 
             const repository = getRepository(ProductSection);
 
-            return await repository.findOneOrFail({ where: { id: id } })
+            return await repository.find({ where: { enterprise_id: id }, relations: ["products"]})
 
         } catch (error) {
             console.log(error)

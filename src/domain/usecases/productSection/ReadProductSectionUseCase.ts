@@ -24,10 +24,10 @@ export class ReadProductSectionUseCase extends UseCase<ReadProductSectionRespons
 }
 
 export class ReadProductSectionResponse {
-    section: ProductSection
+    sections: ProductSection[]
 
-    constructor(section: ProductSection) {
-        this.section = section
+    constructor(sections: ProductSection[]) {
+        this.sections = sections
     }
 }
 
