@@ -10,7 +10,7 @@ export class ReadProductSectionUseCase extends UseCase<ReadProductSectionRespons
     async buildUseCase(params: ReadProductSectionParams): Promise<ReadProductSectionResponse> {
         try {
 
-            const result = await this.repository.read(params.id)
+            const result = await this.repository.read(params.id, params.search)
 
             return new ReadProductSectionResponse(result)
 
@@ -33,8 +33,10 @@ export class ReadProductSectionResponse {
 
 export class ReadProductSectionParams {
     id: number
+    search: string
 
-    constructor(id: number) {
+    constructor(id: number, search: string) {
         this.id = id
+        this.search = search
     }
 }

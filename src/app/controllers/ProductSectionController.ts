@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import AppError from "../../domain/utils/AppError";
 import Errors from "../utils/Errors";
 import textFormat from "../utils/TextFormat";
+import { isNullOrUndefined } from "util";
 
 class ProductSectionController implements CrudController {
 
@@ -54,8 +55,17 @@ class ProductSectionController implements CrudController {
             }
     
             const { id } = req.params
-    
-            const sections = (await this.readProductSectionUseCase.execute(new ReadProductSectionParams(Number(id)))).sections
+            
+            let search = req.query.search
+            
+            if(isNullOrUndefined(search)) {
+                search = ''
+            } else {
+                search = search.toString()
+            }
+            
+
+            const sections = (await this.readProductSectionUseCase.execute(new ReadProductSectionParams(Number(id), search))).sections
     
             return res.json(sections)
 

@@ -1,6 +1,6 @@
 import { IProductSectionRepository } from "../../domain/repositories/IProductSectionRepository";
 import { ProductSection } from "../../domain/entities/ProductSection";
-import { getRepository } from "typeorm";
+import { getRepository, Like } from "typeorm";
 
 export class ProductionSectionRepository implements IProductSectionRepository {
 
@@ -22,12 +22,12 @@ export class ProductionSectionRepository implements IProductSectionRepository {
         }
     }
 
-    async read(id: number): Promise<ProductSection[]> {
+    async read(id: number, search: string): Promise<ProductSection[]> {
         try {
 
             const repository = getRepository(ProductSection);
 
-            return await repository.find({ where: { enterprise_id: id }, relations: ["products"]})
+            return await repository.find({ where: { enterprise_id: id, name: Like(`%${search}%`) }, relations: ["products"] })
 
         } catch (error) {
             console.log(error)
@@ -55,7 +55,7 @@ export class ProductionSectionRepository implements IProductSectionRepository {
 
             const repository = getRepository(ProductSection);
 
-            const result  = await repository.delete(id)
+            const result = await repository.delete(id)
 
             return result.affected > 0
         } catch (error) {
