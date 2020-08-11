@@ -8,6 +8,7 @@ import AppError from "../../domain/utils/AppError";
 import Errors from "../utils/Errors";
 import textFormat from "../utils/TextFormat";
 import * as Yup from 'yup'
+import { isNullOrUndefined } from "util";
 
 
 class OptionalSectionController implements CrudController {
@@ -54,10 +55,19 @@ class OptionalSectionController implements CrudController {
             }
     
             const { id } = req.params
+            
+            let search = req.query.search
+            
+            if(isNullOrUndefined(search)) {
+                search = ''
+            } else {
+                search = search.toString()
+            }
+            
+
+            const sections = (await this.readOptionalUseCase.execute(new ReadOptionalSectionParams(Number(id), search))).sections
     
-            const section = (await this.readOptionalUseCase.execute(new ReadOptionalSectionParams(Number(id)))).section
-    
-            return res.json(section)
+            return res.json(sections)
 
         } catch (error) {
             if(Errors.isQueryError(error)) {

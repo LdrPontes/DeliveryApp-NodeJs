@@ -8,6 +8,8 @@ import * as Yup from 'yup'
 import AppError from "../../domain/utils/AppError";
 import Errors from "../utils/Errors";
 import textFormat from "../utils/TextFormat";
+import { UploadImageUseCase, UploadImageParams } from "../../domain/usecases/image/UploadImageUseCase";
+import { v4 as uuidv4 } from 'uuid';
 
 class ProductController implements CrudController {
 
@@ -15,27 +17,36 @@ class ProductController implements CrudController {
     readProductUseCase = new ReadProductUseCase()
     updateProductUseCase = new UpdateProductUseCase()
     deleteProductUseCase = new DeleteProductUseCase()
-
+    
+    uploadImageUseCase = new UploadImageUseCase()
 
     async save(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
                 title: Yup.string().required(),
                 description: Yup.string().required(),
-                img_url: Yup.string().required(),
+                img: Yup.string(),
+                img_type: Yup.string(),
                 price: Yup.number().required(),
                 enterprise_id: Yup.number().required().integer(),
                 section_id: Yup.number().integer(),
-
+                optional_sections: Yup.array()
             })
 
             if (!(await schema.isValid(req.body))) {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { title, description, img_url, price, enterprise_id, section_id } = req.body
+            const { title, description, img, img_type, price, enterprise_id, product_section_id, optional_sections } = req.body
 
-            const product = (await this.saveProductUseCase.execute(new SaveProductParams(title, description, img_url, price, enterprise_id, section_id))).product
+            //Salva os dados no db
+            let img_url = ''
+
+            if (img != null && img_type != null && img != "" && img_type != "") {
+                img_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4(), img, img_type))).url
+            }
+
+            const product = (await this.saveProductUseCase.execute(new SaveProductParams(title, description, img_url, price, enterprise_id, product_section_id, optional_sections))).product
 
             return res.json(product)
 
@@ -79,20 +90,29 @@ class ProductController implements CrudController {
     async update(req: Request, res: Response) {
         try {
             const schema = Yup.object().shape({
-                name: Yup.string(),
+                title: Yup.string(),
+                description: Yup.string(),
                 price: Yup.number(),
+                img: Yup.string(),
+                img_type: Yup.string(),
                 id: Yup.number().required().integer(),
                 section_id: Yup.number().integer(),
-
+                optional_sections: Yup.array()
             })
 
             if (!(await schema.isValid(req.body))) {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
+            const { id, title, description, img, img_type, price, product_section_id, optional_sections } = req.body
 
-            const { id, title, description, img_url, price, section_id } = req.body
+            //Salva os dados no db
+            let img_url = ''
 
-            const product = (await this.updateProductUseCase.execute(new UpdateProductParams(id , title, description, img_url, price, section_id))).product
+            if (img != null && img_type != null && img != "" && img_type != "") {
+                img_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4(), img, img_type))).url
+            }
+        
+            const product = (await this.updateProductUseCase.execute(new UpdateProductParams(id , title, description, img_url, price, product_section_id, optional_sections))).product
 
             return res.json(product)
 

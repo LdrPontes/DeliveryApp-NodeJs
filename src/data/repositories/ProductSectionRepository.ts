@@ -27,7 +27,17 @@ export class ProductionSectionRepository implements IProductSectionRepository {
 
             const repository = getRepository(ProductSection);
 
-            return await repository.find({ where: { enterprise_id: id, name: Like(`%${search}%`) }, relations: ["products"] })
+            return await repository.find({
+                where: { enterprise_id: id, name: Like(`%${search}%`) }, join: {
+                    alias: "product_section",
+                    leftJoinAndSelect: {
+                        "products": "product_section.products",
+                        "optional_sections": "products.optional_sections"
+                    }
+                }, cache: true
+            })
+
+
 
         } catch (error) {
             console.log(error)

@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, RelationId } from "typeorm";
 import { EnterpriseUser } from "./EnterpriseUser";
 import { ProductSection } from "./ProductSection";
 import { OptionalSection } from "./OptionalSection";
@@ -18,7 +18,7 @@ export class Product {
     @Column({ nullable: true })
     img_url: string
 
-    @Column({ nullable: false, precision: 2, default: 0, type: "decimal" })
+    @Column({ nullable: false, precision: 10, scale: 2, default: 0, type: "decimal" })
     price: number
 
     @Column({ nullable: false })

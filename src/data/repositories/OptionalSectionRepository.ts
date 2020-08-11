@@ -1,6 +1,6 @@
 import { IOptionalSectionRepository } from "../../domain/repositories/IOptionalSectionRepository";
 import { OptionalSection } from "../../domain/entities/OptionalSection";
-import { getRepository } from "typeorm";
+import { getRepository, Like } from "typeorm";
 
 export class OptionalSectionRepository implements IOptionalSectionRepository {
 
@@ -22,12 +22,12 @@ export class OptionalSectionRepository implements IOptionalSectionRepository {
         }
     }
 
-    async read(id: number): Promise<OptionalSection> {
+    async read(id: number, search: string): Promise<OptionalSection[]> {
         try {
 
             const repository = getRepository(OptionalSection);
 
-            return await repository.findOneOrFail({ where: { id: id } })
+            return await repository.find({ where: { enterprise_id: id, name: Like(`%${search}%`) }, relations: ["products"], cache: true})
             
         } catch (error) {
             console.log(error)

@@ -10,7 +10,7 @@ export class UpdateProductUseCase extends UseCase<UpdateProductResponse, UpdateP
     async buildUseCase(params: UpdateProductParams): Promise<UpdateProductResponse> {
         try {
 
-            const result = await this.repository.update(params.id, params.title, params.description, params.img_url, params.price, params.section_id)
+            const result = await this.repository.update(params.id, params.title, params.description, params.img_url, params.price, params.section_id, params.optional_sections)
 
             return new UpdateProductResponse(result)
 
@@ -37,13 +37,15 @@ export class UpdateProductParams {
     img_url: string
     price: number
     section_id: number
+    optional_sections: number[]
 
-    constructor(id: number, title: string, description: string, img_url: string, price: number, section_id: number) {
+    constructor(id: number, title: string, description: string, img_url: string, price: number, section_id: number, optional_sections: number[]) {
         this.id = id
         this.title = title
         this.description = description
         this.img_url = img_url
         this.price = price
         this.section_id = section_id
+        this.optional_sections = optional_sections
     }
 }

@@ -10,7 +10,7 @@ export class SaveProductUseCase extends UseCase<SaveProductResponse, SaveProduct
     async buildUseCase(params: SaveProductParams): Promise<SaveProductResponse> {
         try {
 
-            const result = await this.repository.save(params.title, params.description, params.img_url, params.price, params.enterprise_id, params.section_id)
+            const result = await this.repository.save(params.title, params.description, params.img_url, params.price, params.enterprise_id, params.section_id, params.optional_sections)
 
             return new SaveProductResponse(result)
 
@@ -37,13 +37,15 @@ export class SaveProductParams {
     price: number
     enterprise_id: number
     section_id: number
+    optional_sections: number[]
 
-    constructor(title: string, description: string, img_url: string, price: number, enterprise_id: number, section_id: number) {
+    constructor(title: string, description: string, img_url: string, price: number, enterprise_id: number, section_id: number, optional_sections: number[]) {
         this.title = title
         this.description = description
         this.img_url = img_url
         this.price = price
         this.enterprise_id = enterprise_id
         this.section_id = section_id
+        this.optional_sections = optional_sections
     }
 }

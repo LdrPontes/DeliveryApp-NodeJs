@@ -11,7 +11,7 @@ export class ReadOptionalSectionUseCase extends UseCase<ReadOptionalSectionRespo
     async buildUseCase(params: ReadOptionalSectionParams): Promise<ReadOptionalSectionResponse> {
         try {
 
-            const result = await this.repository.read(params.id)
+            const result = await this.repository.read(params.id, params.search)
 
             return new ReadOptionalSectionResponse(result)
 
@@ -25,17 +25,19 @@ export class ReadOptionalSectionUseCase extends UseCase<ReadOptionalSectionRespo
 }
 
 export class ReadOptionalSectionResponse {
-    section: OptionalSection
+    sections: OptionalSection[]
 
-    constructor(section: OptionalSection) {
-        this.section = section
+    constructor(sections: OptionalSection[]) {
+        this.sections = sections
     }
 }
 
 export class ReadOptionalSectionParams {
     id: number
+    search: string
 
-    constructor(id: number) {
+    constructor(id: number, search: string) {
         this.id = id
+        this.search = search
     }
 }
