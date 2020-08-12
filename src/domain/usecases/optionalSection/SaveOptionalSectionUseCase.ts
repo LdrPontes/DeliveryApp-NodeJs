@@ -11,7 +11,7 @@ export class SaveOptionalSectionUseCase extends UseCase<SaveOptionalSectionRespo
        
         try {
     
-            const result = await this.repository.save(params.name, params.enterprise_id)
+            const result = await this.repository.save(params.name, params.enterprise_id, params.min, params.max)
 
             return new SaveOptionalSectionResponse(result)
 
@@ -33,10 +33,14 @@ export class SaveOptionalSectionResponse {
 
 export class SaveOptionalSectionParams {
     name: string
+    min: number
+    max: number
     enterprise_id: number
 
-    constructor(name: string, enterprise_id: number) {
+    constructor(name: string, enterprise_id: number, min: number, max: number) {
         this.name = name
         this.enterprise_id = enterprise_id
+        this.min = min
+        this.max = max
     }
 }

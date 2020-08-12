@@ -2,7 +2,7 @@ import { OptionalSection } from "../entities/OptionalSection";
 
 export interface IOptionalSectionRepository {
     
-    save(name: string, enterprise_id: number): Promise<OptionalSection>
+    save(name: string, enterprise_id: number, min: number, max: number): Promise<OptionalSection>
 
     read(id: number, search: string): Promise<OptionalSection[]>
 

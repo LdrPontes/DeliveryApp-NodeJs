@@ -12,6 +12,12 @@ export class OptionalSection {
     @Column({ nullable: false, length: 255 })
     name: string
 
+    @Column({ default: 0 })
+    min: number
+
+    @Column({ default: 50 })
+    max: number
+
     @OneToMany(type => OptionalProduct, product => product.section)
     products: OptionalProduct[]
 

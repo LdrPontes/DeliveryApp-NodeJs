@@ -4,7 +4,7 @@ import { getRepository, Like } from "typeorm";
 
 export class OptionalSectionRepository implements IOptionalSectionRepository {
 
-    async save(name: string, enterprise_id: number): Promise<OptionalSection> {
+    async save(name: string, enterprise_id: number, min: number, max: number): Promise<OptionalSection> {
         try {
 
             const repository = getRepository(OptionalSection);
@@ -13,6 +13,8 @@ export class OptionalSectionRepository implements IOptionalSectionRepository {
 
             section.name = name
             section.enterprise_id = enterprise_id
+            section.min = min
+            section.max = max
 
             return await repository.save(section)
             
