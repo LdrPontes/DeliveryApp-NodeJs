@@ -86,6 +86,8 @@ class OptionalSectionController implements CrudController {
             const schema = Yup.object().shape({
                 name: Yup.string(),
                 id: Yup.number().required().integer(),
+                min: Yup.number(),
+                max: Yup.number(),
 
             })
 
@@ -93,9 +95,9 @@ class OptionalSectionController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { id, name} = req.body
+            const { id, name, min, max } = req.body
 
-            const section = (await this.updateOptionalUseCase.execute(new UpdateOptionalSectionParams(id , name))).section
+            const section = (await this.updateOptionalUseCase.execute(new UpdateOptionalSectionParams(id , name, min, max))).section
 
             return res.json(section)
 

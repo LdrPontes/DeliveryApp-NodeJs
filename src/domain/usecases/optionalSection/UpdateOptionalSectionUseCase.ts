@@ -10,7 +10,7 @@ export class UpdateOptionalSectionUseCase extends UseCase<UpdateOptionalSectionR
     async buildUseCase(params: UpdateOptionalSectionParams): Promise<UpdateOptionalSectionResponse> {
         try {
             
-            const result = await this.repository.update(params.id, params.name)
+            const result = await this.repository.update(params.id, params.name, params.min, params.max)
 
             return new UpdateOptionalSectionResponse(result)
 
@@ -32,10 +32,14 @@ export class UpdateOptionalSectionResponse {
 
 export class UpdateOptionalSectionParams {
     id: number
+    min: number
+    max: number
     name: string
 
-    constructor(id: number, name: string) {
+    constructor(id: number, name: string, min: number, max: number) {
         this.id = id
         this.name = name
+        this.min = min
+        this.max = max
     }
 }

@@ -42,7 +42,7 @@ export class OptionalRepository implements IOptionalRepository {
 
             const repository = getRepository(OptionalProduct);
 
-            const result = await repository.update(id, { name: name, price: price, optional_section_id: section_id })
+            const result = await repository.update(id, { name: name, price: price })
 
          
 

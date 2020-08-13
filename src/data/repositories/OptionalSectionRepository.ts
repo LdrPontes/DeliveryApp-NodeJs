@@ -37,12 +37,12 @@ export class OptionalSectionRepository implements IOptionalSectionRepository {
         }
     }
 
-    async update(id: number, name: string): Promise<OptionalSection> {
+    async update(id: number, name: string, min: number, max: number): Promise<OptionalSection> {
         try {
 
             const repository = getRepository(OptionalSection);
 
-            const result = await repository.update(id, { name: name })
+            const result = await repository.update(id, { name: name, min: min, max: max })
 
             return await repository.findOneOrFail({ where: { id: id } })
         
