@@ -107,7 +107,8 @@ class EnterpriseController implements CrudController {
         try {
             const schema = Yup.object().shape({
                 name: Yup.string(),
-                logo_url: Yup.string(),
+                img: Yup.string(),
+                img_type: Yup.string(),
                 address: Yup.string(),
                 id: Yup.number().required().integer(),
                 category_id: Yup.number().integer(),
@@ -118,7 +119,14 @@ class EnterpriseController implements CrudController {
                 return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
             }
 
-            const { id, name, address, logo_url, category_id } = req.body
+            const { id, name, address, img, img_type, category_id } = req.body
+
+            //Salva os dados no db
+            let logo_url = ''
+
+            if (img != null && img_type != null && img != "" && img_type != "") {
+                logo_url = (await this.uploadImageUseCase.execute(new UploadImageParams(uuidv4(), img, img_type))).url
+            }
 
             const enterprise = (await this.updateEnterpriseUseCase.execute(new UpdateEnterpriseParams(id, name, address, logo_url, category_id))).enterprise
 
@@ -126,8 +134,10 @@ class EnterpriseController implements CrudController {
 
         } catch (error) {
             if (Errors.isQueryError(error)) {
-                console.log(error)
-                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+                if (error.message.includes('ER_DUP_ENTRY'))
+                    return res.status(400).json(new AppError(400, 'ER_DUP_ENTRY', error.message))
+                else
+                    return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
                 return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
             }

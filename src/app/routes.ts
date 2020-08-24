@@ -7,6 +7,7 @@ import productSectionController from './controllers/ProductSectionController'
 import optionalSectionController from './controllers/OptionalSectionController'
 import authMiddleware from './middlewares/AuthMiddleware'
 import categoryController from './controllers/CategoryController'
+import enterpriseUserController from './controllers/EnterpriseUserController'
 
 
 class Routes {
@@ -21,6 +22,7 @@ class Routes {
         this.productRoutes()
         this.productSectionRoutes()
         this.categoryRoutes()
+        this.enterpriseUserRoutes()
     }
 
     private authEnterpriseRoutes(): void {
@@ -122,6 +124,12 @@ class Routes {
     private categoryRoutes(){
         this.routes.get('/category/read', authMiddleware, (req, res) => {
             categoryController.readAll(req, res)
+        })
+    }
+
+    private enterpriseUserRoutes() {
+        this.routes.put('/enterprise/user/update', authMiddleware, (req, res) => {
+            enterpriseUserController.update(req, res)
         })
     }
 }
