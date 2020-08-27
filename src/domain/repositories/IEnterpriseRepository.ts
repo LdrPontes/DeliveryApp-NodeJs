@@ -1,4 +1,5 @@
 import { Enterprise } from "../entities/Enterprise";
+import { EnterpriseSettings } from "../entities/EnterpriseSettings";
 
 export interface IEnterpriseRepository {
 
@@ -7,6 +8,8 @@ export interface IEnterpriseRepository {
     read(id: number): Promise<Enterprise>
 
     update(id: number, name: string, address: string, logo_url: string, category_id: number): Promise<Enterprise>
+
+    updateSettings(id: number, settings: EnterpriseSettings): Promise<boolean>
 
     delete(id: number): Promise<boolean>
 } 

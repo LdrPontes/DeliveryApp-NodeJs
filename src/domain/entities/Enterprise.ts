@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { Category } from "./Category";
+import { EnterpriseSettings } from "./EnterpriseSettings";
 
 @Entity({ name: 'enterprise' })
 export class Enterprise {
@@ -10,10 +11,10 @@ export class Enterprise {
     @Column()
     name: string
 
-    @Column({ nullable: false, length: 20, unique: true})
+    @Column({ nullable: false, length: 20, unique: true })
     document: string
 
-    @Column({ nullable: false})
+    @Column({ nullable: false })
     document_type: number //0 - CPF. 1 - CNPJ
 
     @Column({ nullable: false })
@@ -24,7 +25,12 @@ export class Enterprise {
 
     @Column({ nullable: false })
     category_id: number
-    
+
+    @Column({
+        type: 'json',
+    })
+    settings: string
+
     @CreateDateColumn()
     created_at: string
 
@@ -34,4 +40,7 @@ export class Enterprise {
     @ManyToOne(type => Category)
     @JoinColumn({ name: "category_id" })
     category: Category;
+
+
+
 }

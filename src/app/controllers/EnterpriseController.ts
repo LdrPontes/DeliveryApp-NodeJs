@@ -11,12 +11,14 @@ import { DeleteEnterpriseUseCase, DeleteEnterpriseParams } from "../../domain/us
 import { UploadImageUseCase, UploadImageParams } from "../../domain/usecases/image/UploadImageUseCase";
 import { v4 as uuidv4 } from 'uuid';
 import { cpf, cnpj } from 'cpf-cnpj-validator'
+import { UpdateEnterpriseSettingsUseCase, UpdateEnterpriseSettingsParams } from "../../domain/usecases/enterprise/UpdateEntepriseSettingsUseCase";
 
 class EnterpriseController implements CrudController {
 
     saveEnterpriseUseCase = new SaveEnterpriseUseCase()
     readEnterpriseUseCase = new ReadEnterpriseUseCase()
     updateEnterpriseUseCase = new UpdateEnterpriseUseCase()
+    updateEnterpriseSettingsUseCase = new UpdateEnterpriseSettingsUseCase()
     deleteEnterpriseUseCase = new DeleteEnterpriseUseCase()
 
     uploadImageUseCase = new UploadImageUseCase()
@@ -138,6 +140,39 @@ class EnterpriseController implements CrudController {
                     return res.status(400).json(new AppError(400, 'ER_DUP_ENTRY', error.message))
                 else
                     return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
+        }
+    }
+
+    async updateSettings(req: Request, res: Response) {
+        try {
+            const schema = Yup.object().shape({
+                id: Yup.number().required().integer(),
+                settings: Yup.object().required(),
+
+            })
+
+            if (!(await schema.isValid(req.body))) {
+                return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
+            }
+
+            const { id, settings } = req.body
+
+
+            const result = (await this.updateEnterpriseSettingsUseCase.execute(new UpdateEnterpriseSettingsParams(id, settings))).success
+
+            return res.status(result ? 200 : 400).json({
+                status: result ? 200 : 400,
+                name: result ? 'ENTERPRISE_SETTINGS_UPDATED' : 'ENTITY_NOT_FOUND',
+                success: result
+            })
+
+        } catch (error) {
+            if (Errors.isQueryError(error)) {
+                console.log(error)
+                return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
                 return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
             }

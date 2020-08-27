@@ -2,9 +2,11 @@ import { IEnterpriseRepository } from "../../domain/repositories/IEnterpriseRepo
 import { Enterprise } from "../../domain/entities/Enterprise";
 import { getRepository } from "typeorm";
 import { EnterpriseUser } from "../../domain/entities/EnterpriseUser";
+import { EnterpriseSettings } from "../../domain/entities/EnterpriseSettings";
 
 
 export class EnterpriseRepository implements IEnterpriseRepository {
+   
     async save(name: string, document_type: number, document: string, address: string, logo_url: string, enterprise_id: number, category_id: number): Promise<Enterprise> {
         try {
 
@@ -20,11 +22,12 @@ export class EnterpriseRepository implements IEnterpriseRepository {
             enterprise.address = address
             enterprise.logo_url = logo_url
             enterprise.category_id = category_id
+            enterprise.settings = JSON.stringify({ "delivery": { "min_price": 0.0, "free_delivery_above": 0.0, "free_delivery_above_enabled": false, "delivery_fee_type": 0, "delivery_fee": 0.0, "delivery_time_start": 30, "delivery_time_end": 60 }, "enterprise": { "daily_works": [], "ask_cpf": false, "observation_enabled": true, "accept_money": true, "accept_credit_card": true, "accept_debit_card": true } })
 
 
             const result = await repository.save(enterprise)
 
-            await repositoryUser.update(enterprise_id, { enterprise : enterprise })
+            await repositoryUser.update(enterprise_id, { enterprise: enterprise })
 
             return result
 
@@ -53,9 +56,26 @@ export class EnterpriseRepository implements IEnterpriseRepository {
 
             const repository = getRepository(Enterprise);
 
-            const result = await repository.update(id, { name: name, address: address, logo_url: logo_url, category_id: category_id })
+            const values = { name: name, address: address, logo_url: logo_url !== '' ? logo_url : undefined, category_id: category_id }
+
+            await repository.update(id, JSON.parse(JSON.stringify(values)))
 
             return await repository.findOneOrFail({ where: { id: id } })
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    async updateSettings(id: number, settings: EnterpriseSettings): Promise<boolean> {
+        try {
+
+            const repository = getRepository(Enterprise);
+
+            const result = await repository.update(id, { settings: JSON.stringify(settings)})
+
+            return result.affected > 0
 
         } catch (error) {
             console.log(error)
