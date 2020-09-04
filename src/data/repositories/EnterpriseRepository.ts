@@ -6,7 +6,7 @@ import { EnterpriseSettings } from "../../domain/entities/EnterpriseSettings";
 
 
 export class EnterpriseRepository implements IEnterpriseRepository {
-   
+
     async save(name: string, document_type: number, document: string, address: string, logo_url: string, enterprise_id: number, category_id: number): Promise<Enterprise> {
         try {
 
@@ -22,6 +22,8 @@ export class EnterpriseRepository implements IEnterpriseRepository {
             enterprise.address = address
             enterprise.logo_url = logo_url
             enterprise.category_id = category_id
+            enterprise.enterprise_user_id = enterprise_id
+            enterprise.code = name.toLowerCase().replace(/[^\w\s]/gi, '').replace(' ', '_')
             enterprise.settings = JSON.stringify({ "delivery": { "min_price": 0.0, "free_delivery_above": 0.0, "free_delivery_above_enabled": false, "delivery_fee_type": 0, "delivery_fee": 0.0, "delivery_time_start": 30, "delivery_time_end": 60 }, "enterprise": { "daily_works": [], "ask_cpf": false, "observation_enabled": true, "accept_money": true, "accept_credit_card": true, "accept_debit_card": true } })
 
 
@@ -51,6 +53,34 @@ export class EnterpriseRepository implements IEnterpriseRepository {
         }
     }
 
+    async readByCode(code: string): Promise<Enterprise> {
+        try {
+            const repository = getRepository(Enterprise);
+
+            console.log(code)
+
+            const result = await repository.createQueryBuilder("enterprise")
+                .select([
+                    'enterprise.id',
+                    'enterprise.name',
+                    'enterprise.address',
+                    'enterprise.settings',
+                ])
+                .where({ code: code })
+                .innerJoinAndSelect("enterprise.product_sections", "product_sections")
+                .innerJoinAndSelect("product_sections.products", "products")
+                .innerJoinAndSelect("products.optional_sections", "optional_sections")
+                .innerJoinAndSelect("optional_sections.products", "optionals")
+                .getOne()
+
+            return result
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
     async update(id: number, name: string, address: string, logo_url: string, category_id: number): Promise<Enterprise> {
         try {
 
@@ -73,7 +103,7 @@ export class EnterpriseRepository implements IEnterpriseRepository {
 
             const repository = getRepository(Enterprise);
 
-            const result = await repository.update(id, { settings: JSON.stringify(settings)})
+            const result = await repository.update(id, { settings: JSON.stringify(settings) })
 
             return result.affected > 0
 

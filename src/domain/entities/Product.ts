@@ -1,7 +1,7 @@
 import { PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, RelationId } from "typeorm";
-import { EnterpriseUser } from "./EnterpriseUser";
 import { ProductSection } from "./ProductSection";
 import { OptionalSection } from "./OptionalSection";
+import { Enterprise } from "./Enterprise";
 
 @Entity({ name: "product" })
 export class Product {
@@ -27,9 +27,9 @@ export class Product {
     @Column({ nullable: false })
     product_section_id: number
 
-    @ManyToOne(type => EnterpriseUser, enterprise => enterprise.products)
+    @ManyToOne(type => Enterprise, enterprise => enterprise.products)
     @JoinColumn({ name: 'enterprise_id' })
-    enterprise: EnterpriseUser
+    enterprise: Enterprise
 
     @ManyToOne(type => ProductSection, section => section.products)
     @JoinColumn({ name: "product_section_id" })

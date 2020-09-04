@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Product } from "./Product";
-import { EnterpriseUser } from "./EnterpriseUser";
+import { Enterprise } from "./Enterprise";
 
 @Entity({ name: "product_section" })
 export class ProductSection {
@@ -23,7 +23,7 @@ export class ProductSection {
     @UpdateDateColumn()
     updated_at: string
 
-    @ManyToOne(type => EnterpriseUser, enterprise => enterprise.product_sections)
+    @ManyToOne(type => Enterprise, enterprise => enterprise.product_sections)
     @JoinColumn({ name: 'enterprise_id' })
-    enterprise: EnterpriseUser
+    enterprise: Enterprise
 }

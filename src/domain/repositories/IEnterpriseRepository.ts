@@ -12,4 +12,6 @@ export interface IEnterpriseRepository {
     updateSettings(id: number, settings: EnterpriseSettings): Promise<boolean>
 
     delete(id: number): Promise<boolean>
+
+    readByCode(code: string): Promise<Enterprise>
 } 

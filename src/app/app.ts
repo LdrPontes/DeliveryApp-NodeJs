@@ -9,6 +9,7 @@ import sentryConfig from './config/sentry'
 import 'reflect-metadata'
 import AppError from '../domain/utils/AppError'
 import cors from 'cors'
+import bodyParser from 'body-parser'
 
 class App {
     public express = express.application
@@ -24,9 +25,18 @@ class App {
     }
 
     private middlewares(): void {
+        this.express.use(bodyParser.json({
+            limit: '50mb'
+        }))
+        this.express.use(bodyParser.urlencoded({
+            limit: '50mb',
+            parameterLimit: 50000,
+            extended: true
+        }))
         this.express.use(Sentry.Handlers.requestHandler())
         this.express.use(express.json())
         this.express.use(cors());
+      
     }
 
     private async database() {
@@ -35,7 +45,7 @@ class App {
         }).catch(error => {
             console.log("Type " + error.type)
             throw new AppError(500, "TypeORM connection error: ", error)
-            
+
         })
     }
 
@@ -55,7 +65,8 @@ class App {
 
     private exceptionHandler(): void {
         this.express.use(async (err, req, res, next) => {
-            const errors = await new Youch(err, req).toJson()
+            console.log(err)
+            const errors = await new Youch(err, req)
 
             return res.status(500).json(errors)
         })

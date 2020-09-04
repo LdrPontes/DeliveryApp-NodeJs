@@ -1,6 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, UpdateDateColumn, CreateDateColumn, ManyToOne, OneToOne, OneToMany } from "typeorm";
 import { Category } from "./Category";
-import { EnterpriseSettings } from "./EnterpriseSettings";
+import { EnterpriseUser } from "./EnterpriseUser";
+import { Product } from "./Product";
+import { ProductSection } from "./ProductSection";
+import { OptionalProduct } from "./OptionalProduct";
+import { OptionalSection } from "./OptionalSection";
 
 @Entity({ name: 'enterprise' })
 export class Enterprise {
@@ -31,6 +35,12 @@ export class Enterprise {
     })
     settings: string
 
+    @Column({ nullable: false, unique: true })
+    code: string
+
+    @Column({ nullable: false })
+    enterprise_user_id: number
+
     @CreateDateColumn()
     created_at: string
 
@@ -41,6 +51,22 @@ export class Enterprise {
     @JoinColumn({ name: "category_id" })
     category: Category;
 
+    @OneToOne(type => EnterpriseUser)
+    @JoinColumn({ name: "enterprise_user_id" })
+    user: EnterpriseUser;
+
+
+    @OneToMany(type => Product, product => product.enterprise)
+    products: Product[]
+
+    @OneToMany(type => ProductSection, productSection => productSection.enterprise)
+    product_sections: ProductSection[]
+
+    @OneToMany(type => OptionalProduct, optional => optional.enterprise)
+    optionals: OptionalProduct[]
+
+    @OneToMany(type => OptionalSection, optional => optional.enterprise)
+    optional_sections: OptionalSection[]
 
 
 }
