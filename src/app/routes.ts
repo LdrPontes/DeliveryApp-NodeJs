@@ -53,6 +53,10 @@ class Routes {
         this.routes.put('/enterprise/update/settings', authMiddleware, (req, res) => {
             enterpriseController.updateSettings(req, res)
         })
+
+        this.routes.put('/enterprise/update/catalog', authMiddleware, (req, res) => {
+            enterpriseController.updateCatalog(req, res)
+        })
     }
 
     private productRoutes(){

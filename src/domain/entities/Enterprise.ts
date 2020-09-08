@@ -35,6 +35,11 @@ export class Enterprise {
     })
     settings: string
 
+    @Column({
+        type: 'json',
+    })
+    catalog: string
+
     @Column({ nullable: false, unique: true })
     code: string
 

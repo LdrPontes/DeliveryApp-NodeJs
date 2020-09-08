@@ -12,6 +12,7 @@ import { UploadImageUseCase, UploadImageParams } from "../../domain/usecases/ima
 import { v4 as uuidv4 } from 'uuid';
 import { cpf, cnpj } from 'cpf-cnpj-validator'
 import { UpdateEnterpriseSettingsUseCase, UpdateEnterpriseSettingsParams } from "../../domain/usecases/enterprise/UpdateEntepriseSettingsUseCase";
+import { UpdateEnterpriseCatalogUseCase, UpdateEnterpriseCatalogParams } from "../../domain/usecases/enterprise/UpdateCatalogUseCase";
 
 class EnterpriseController implements CrudController {
 
@@ -19,6 +20,7 @@ class EnterpriseController implements CrudController {
     readEnterpriseUseCase = new ReadEnterpriseUseCase()
     updateEnterpriseUseCase = new UpdateEnterpriseUseCase()
     updateEnterpriseSettingsUseCase = new UpdateEnterpriseSettingsUseCase()
+    updateEnterpriseCatalogUseCase = new UpdateEnterpriseCatalogUseCase()
     deleteEnterpriseUseCase = new DeleteEnterpriseUseCase()
 
     uploadImageUseCase = new UploadImageUseCase()
@@ -173,6 +175,42 @@ class EnterpriseController implements CrudController {
             if (Errors.isQueryError(error)) {
                 console.log(error)
                 return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
+            } else {
+                return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
+            }
+        }
+    }
+
+    async updateCatalog(req: Request, res: Response) {
+        try {
+            const schema = Yup.object().shape({
+                id: Yup.number().required().integer(),
+                catalog: Yup.object().required(),
+                code: Yup.string().required(),
+
+            })
+
+            if (!(await schema.isValid(req.body))) {
+                return res.status(400).json(new AppError(400, 'INVALID_PARAMETERS', 'Invalid params for request'))
+            }
+
+            const { id, catalog, code } = req.body
+
+
+            const result = (await this.updateEnterpriseCatalogUseCase.execute(new UpdateEnterpriseCatalogParams(id, catalog, code))).success
+
+            return res.status(result ? 200 : 400).json({
+                status: result ? 200 : 400,
+                name: result ? 'ENTERPRISE_CATALOG_UPDATED' : 'ENTITY_NOT_FOUND',
+                success: result
+            })
+
+        } catch (error) {
+            if (Errors.isQueryError(error)) {
+                if (error.message.includes('ER_DUP_ENTRY'))
+                    return res.status(400).json(new AppError(400, 'ER_DUP_ENTRY', error.message))
+                else
+                    return res.status(400).json(new AppError(400, textFormat.camelToUnderscore(error.name), error.message))
             } else {
                 return res.status(500).json(new AppError(500, textFormat.camelToUnderscore(error.name), error.message))
             }

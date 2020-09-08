@@ -18,7 +18,7 @@ export class Product {
     @Column({ nullable: true })
     img_url: string
 
-    @Column({ nullable: false, precision: 10, scale: 2, default: 0, type: "decimal" })
+    @Column({ nullable: false, precision: 2, type: "float" })
     price: number
 
     @Column({ nullable: false })
