@@ -59,7 +59,7 @@ class App {
         Sentry.init(_sentry2.default)
 
         _dotenv2.default.config({
-            path: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env"
+            path: ".env"
         })
     }
 
