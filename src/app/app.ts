@@ -57,9 +57,10 @@ class App {
 
     private configs(): void {
         Sentry.init(sentryConfig)
-
+        const path = process.env.NODE_ENV === 'prod' ? '.env' : '.env.dev'
+        console.log(path)
         dotenv.config({
-            path: ".env"
+            path: path
         })
     }
 
