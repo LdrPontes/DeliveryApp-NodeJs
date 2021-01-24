@@ -8,3 +8,4 @@ Contato: https://www.linkedin.com/in/ldrpontes/
 
 * https://expressjs.com/
 * https://typeorm.io/#/
+* https://www.npmjs.com/package/aws-sdk
